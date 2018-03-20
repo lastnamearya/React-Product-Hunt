@@ -1,8 +1,9 @@
-// React Components are ES6 Classes that extend the class React.Component
-
-// We're now able to represent the Product Component instance in JSX inside of return. It might seem odd at first that we're able to have a JavaScript Array of JSX Elements. Bable will transpile the JSX representation of each product into regular JavaScript.
 
 class ProductList extends React.Component {
+  handleProductUpVote(productId){
+    console.log(productId + ' was upvoted.');
+  }
+
   render() {
     const products = Seed.products.sort((a,b) => (
       b.votes - a.votes
@@ -17,6 +18,7 @@ class ProductList extends React.Component {
         votes={product.votes}
         submitterAvatarUrl={product.submitterAvatarUrl}
         productImageUrl={product.productImageUrl}
+        onVote={this.handleProductUpVote}
       />
     ));
     return (
@@ -27,11 +29,18 @@ class ProductList extends React.Component {
   }
 }
 
-// Building Product (child component)
-
-// In React, a componet can access all its props thorugh the object this.props
+// Manually Binding of "this" keyword
 
 class Product extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleUpVote = this.handleUpVote.bind(this);
+  }
+  handleUpVote() {
+    this.props.onVote(this.props.id);
+  }
+
   render() {
     return (
       <div className="item">
@@ -40,7 +49,7 @@ class Product extends React.Component {
         </div>
         <div className="middle aligned content">
           <div className="header">
-            <a>
+            <a onClick={this.handleUpVote}>
               <i className='large caret up icon' />
             </a>
             {this.props.votes}
@@ -65,12 +74,6 @@ class Product extends React.Component {
     );
   }
 }
-
-// We need to instruct React to render this ProductList inside a specified DOM Node.
-
-/* We pass two arguments to the ReactDOM.render() method, The first argument is what we'd like to render.    The second argument is where to render.
-  - In React, native HTML element always start with a lowercase letter whereas React Component names always start with an uppercase letter.
-*/
 
 ReactDOM.render(
   <ProductList />,

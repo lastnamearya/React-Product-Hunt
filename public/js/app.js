@@ -1,21 +1,24 @@
 // React Components are ES6 Classes that extend the class React.Component
 
-// Our Product Component is now data-driven. Based on the props it receives it can render any product that we'd like.
+// We're now able to represent the Product Component instance in JSX inside of return. It might seem odd at first that we're able to have a JavaScript Array of JSX Elements. Bable will transpile the JSX representation of each product into regular JavaScript.
 
 class ProductList extends React.Component {
   render() {
-    const product = Seed.products[0];
+    const productComponents = Seed.products.map((product) => (
+      <Product 
+        key={'product-' + product.id}
+        id={product.id}
+        title={product.title}
+        description={product.description}
+        url={product.url}
+        votes={product.votes}
+        submitterAvatarUrl={product.submitterAvatarUrl}
+        productImageUrl={product.productImageUrl}
+      />
+    ));
     return (
       <div className="ui unstackable items">
-        <Product 
-          id={product.id}
-          title={product.title}
-          description={product.description}
-          url={product.url}
-          votes={product.votes}
-          submitterAvatarUrl={product.submitterAvatarUrl}
-          productImageUrl={product.productImageUrl}
-        />
+        {productComponents}
       </div>
     );
   }
